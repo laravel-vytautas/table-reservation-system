@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('restaurants', \App\Http\Controllers\RestaurantsController::class);
+Route::apiResource('tables', \App\Http\Controllers\TablesController::class);
+Route::post('tables/{table}/reserve', [\App\Http\Controllers\TablesController::class, 'reserve']);
+Route::delete('tables/{table}/{reservation}/cancel-reservation', [\App\Http\Controllers\TablesController::class, 'cancelReservation']);
