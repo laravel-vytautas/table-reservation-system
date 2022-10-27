@@ -1,31 +1,30 @@
 Table reservation system API
 
-1. Run migrations
+Run migrations
 
-2. Create restaurants:
+Create restaurants:
 POST /api/restaurants
    
    
-    {
+     {
         "name": "Test-restaurant",
-        "table_count": 5,
         "max_people_count": 20
-    }
+     }
 
 
-3.Create tables:
+Create tables:
 POST api/tables
 
 
-    {
+     {
         "name":"first table",
         "restaurant_id": 1,
 	    "place_count": 5
-    }
+     }
 
 
-4. Reserve table:
-POST api/tables/{table_id}/reserve
+Reserve table:
+POST api/tables/reserve
 
     
     {
@@ -35,6 +34,8 @@ POST api/tables/{table_id}/reserve
 			"email":"test@test.com",
 			"phone":"+37012312300"
 		},
+        "table_id":1
+        "first_free_table":false
 		"reserved_date":"2022-10-27",
 		"reserved_time":"14:00",
 		"users": [
@@ -54,11 +55,16 @@ POST api/tables/{table_id}/reserve
     }
 
 
-5. Tables list api/tables GET
+Use table_id when you want select custom table to reserve.
+Use first_free_table - true if you want select first free table to reserve.
+
+Tables list api/tables GET
 Filters:
 
 
     free_tables (boolean)
+
+    place_count
 
     restaurant_id
 

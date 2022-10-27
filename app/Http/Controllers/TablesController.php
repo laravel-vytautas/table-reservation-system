@@ -29,6 +29,10 @@ class TablesController extends Controller
             $query->where('restaurant_id', $request->input('restaurant_id'));
         }
 
+        if ($request->filled('place_count')) {
+            $query->where('place_count', $request->input('place_count'));
+        }
+
         if ($request->filled('name')) {
             $query->where('name', 'LIKE', "%" . $request->input('name') . "%");
         }
@@ -85,9 +89,12 @@ class TablesController extends Controller
         return $table->fresh()->load('reservations.reservedBy', 'restaurant', 'reservations.users');
     }
 
-    public function reserve(ReserveRequest $request, Table $table)
+    public function reserve(ReserveRequest $request)
     {
-        return DB::transaction(function () use ($request, $table) {
+        return DB::transaction(function () use ($request) {
+
+            $table = $request->input('table');
+
             $reservedUser = User::updateOrCreate(
                 ['email' => $request->input('reserved_by.email')], [
                 'first_name' => $request->input('reserved_by.first_name'),

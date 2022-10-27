@@ -4,11 +4,13 @@ namespace App\Http\Requests\Table;
 
 use App\Models\Reservation;
 use App\Models\Table;
+use App\Rules\AllTablesReserved;
 use App\Rules\MaxRestaurantUsersCount;
 use App\Rules\MaxTableUsersCount;
 use App\Rules\ReservationCheck;
 use App\Rules\UniqueEmail;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class ReserveRequest extends FormRequest
 {
@@ -29,13 +31,35 @@ class ReserveRequest extends FormRequest
      */
     public function rules()
     {
+        $table = null;
+            if ($this->boolean("first_free_table")) {
+                $table = Table::query()->whereDoesntHave('reservations')->first();
+
+                if (!$table) {
+                    return ["first_free_table" => [new AllTablesReserved()]];
+                }
+            }
+
+            if (!$table){
+                $table = Table::where('id',$this->table_id)->first();
+                if(!$table){
+                    return [
+                        "table_id" => "required|exists:tables,id",
+                        "first_free_table" => ["required",new AllTablesReserved()]
+                    ];
+                }
+            }
+            $this->merge(['table' => $table]);
+
         $usersCount = count($this->users??[]);
         return [
-            "reserved_date" => [new ReservationCheck($this->route('table')), "required", "date"],
+            "first_free_table" => ["required","boolean"],
+            "table_id" => [new RequiredIf(!$this->boolean("first_free_table")), "exists:tables,id"],
+            "reserved_date" => [new ReservationCheck($table), "required", "date"],
             "reserved_time" => "required|in:" . implode(',', Reservation::RESERVATION_TIMES),
             "users" => [
-                new MaxTableUsersCount($this->route('table'),$usersCount),
-                new MaxRestaurantUsersCount($this->route('table'), $usersCount, $this->reserved_date),
+                new MaxTableUsersCount($table,$usersCount),
+                new MaxRestaurantUsersCount($table, $usersCount, $this->reserved_date),
                 new UniqueEmail(),
                 "required",
                 "array"
