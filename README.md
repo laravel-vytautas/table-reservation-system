@@ -28,16 +28,16 @@ POST api/tables/reserve
 
     
     {
+        "reserved_date":"2022-10-27",
+	    "reserved_time":"14:00",
+        "table_id":1,
+        "first_free_table":false,
         "reserved_by": {
 	        "first_name":"Petras",
 			"last_name":"Petraitis",
 			"email":"test@test.com",
 			"phone":"+37012312300"
 		},
-        "table_id":1
-        "first_free_table":false
-		"reserved_date":"2022-10-27",
-		"reserved_time":"14:00",
 		"users": [
 		  {
 			"first_name":"Petras",
