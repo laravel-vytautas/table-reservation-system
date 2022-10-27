@@ -5,13 +5,13 @@ Table reservation system API
 2. Create restaurants:
 POST /api/restaurants
    
-
-
+   
     {
         "name": "Test-restaurant",
         "table_count": 5,
         "max_people_count": 20
     }
+
 
 3.Create tables:
 POST api/tables
