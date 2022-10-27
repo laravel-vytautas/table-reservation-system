@@ -1,30 +1,33 @@
-Table reservation system API
 
-1. Run migrations
+Table reservation system
 
-2. Create restaurants:
+Run migrations
+
+Create restaurants:
 POST /api/restaurants
    
    
-    {
-        "name": "Test-restaurant",
-        "table_count": 5,
-        "max_people_count": 20
+   
+    { 
+        "name":"Test-restaurant",
+        "table_count":5,
+        "max_people_count":20     
     }
+   
 
 
-3.Create tables:
+Create tables:
 POST api/tables
 
 
     {
         "name":"first table",
-        "restaurant_id": 1,
-	    "place_count": 5
+        "restaurant_id":1,
+	    "place_count":5
     }
 
 
-4. Reserve table:
+Reserve table:
 POST api/tables/{table_id}/reserve
 
     
@@ -54,7 +57,7 @@ POST api/tables/{table_id}/reserve
     }
 
 
-5. Tables list api/tables GET
+Tables list api/tables GET
 Filters:
 
 
